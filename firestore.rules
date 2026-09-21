@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      // Custom claim set server-side by a Cloud Function using the
+      // Firebase Admin SDK — never trust a client-supplied role field.
+      return isSignedIn() && request.auth.token.role == 'admin';
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // users/{uid} and their conversations — owner-only.
+    match /users/{uid} {
+      allow read, update: if isOwner(uid);
+      allow create: if isOwner(uid);
+      allow delete: if false;
+
+      match /conversations/{conversationId} {
+        allow read, write: if isOwner(uid);
+
+        match /messages/{messageId} {
+          allow read, write: if isOwner(uid);
+        }
+      }
+    }
+
+    // Announcements — signed-in users read active ones; only admins write.
+    match /announcements/{announcementId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Maintenance config — signed-in users read; only admins write.
+    match /maintenance/{doc} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Non-secret app configuration (legal URLs, feature flags).
+    match /appConfig/{doc} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Gemini secrets are never stored in Firestore at all — see
+    // functions/src/ai.js, which uses Secret Manager instead. This
+    // document only holds non-secret status metadata.
+    match /appConfig/ai {
+      allow read: if isAdmin();
+      allow write: if false; // written only by Cloud Functions (Admin SDK bypasses rules)
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

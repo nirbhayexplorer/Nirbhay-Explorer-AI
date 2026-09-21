@@ -1,0 +1,155 @@
+/* ==========================================================
+   Nirbhay Explorer AI — design tokens
+   Glass-liquid system: color, radius, shadow, spacing, motion
+   ========================================================== */
+
+:root{
+  /* dark (default) surface tokens */
+  --nx-bg-0:#0b0d10;
+  --nx-bg-1:#12151a;
+  --nx-glass:rgba(255,255,255,0.055);
+  --nx-glass-strong:rgba(255,255,255,0.09);
+  --nx-border:rgba(255,255,255,0.09);
+  --nx-border-strong:rgba(255,255,255,0.16);
+  --nx-ink:#eef1f4;
+  --nx-ink-dim:#9aa3ad;
+  --nx-ink-faint:#6b7280;
+
+  /* radius */
+  --nx-radius-lg:22px;
+  --nx-radius-md:14px;
+  --nx-radius-sm:9px;
+  --nx-radius-pill:999px;
+
+  /* shadow */
+  --nx-shadow-card:0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -20px rgba(0,0,0,0.55);
+  --nx-shadow-pop:0 20px 60px -20px rgba(0,0,0,0.6);
+
+  /* spacing scale */
+  --nx-space-1:4px;
+  --nx-space-2:8px;
+  --nx-space-3:12px;
+  --nx-space-4:16px;
+  --nx-space-5:20px;
+  --nx-space-6:28px;
+
+  /* motion */
+  --nx-ease:cubic-bezier(.4,0,.2,1);
+  --nx-fast:150ms;
+  --nx-med:220ms;
+  --nx-slow:320ms;
+
+  /* accent — overridden by data-accent on <html> */
+  --nx-accent:#3b7cf5;
+  --nx-accent-ink:#ffffff;
+  --nx-accent-soft:rgba(59,124,245,0.16);
+  --nx-accent-glow:rgba(59,124,245,0.35);
+
+  color-scheme: dark;
+}
+
+:root[data-theme="light"],
+:root:not([data-theme="dark"]){
+  --nx-bg-0:#f3f2ef;
+  --nx-bg-1:#ffffff;
+  --nx-glass:rgba(255,255,255,0.55);
+  --nx-glass-strong:rgba(255,255,255,0.75);
+  --nx-border:rgba(20,20,25,0.08);
+  --nx-border-strong:rgba(20,20,25,0.14);
+  --nx-ink:#16181c;
+  --nx-ink-dim:#5a6068;
+  --nx-ink-faint:#8a8f96;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-theme="dark"]){
+    --nx-bg-0:#0b0d10;
+    --nx-bg-1:#12151a;
+    --nx-glass:rgba(255,255,255,0.055);
+    --nx-glass-strong:rgba(255,255,255,0.09);
+    --nx-border:rgba(255,255,255,0.09);
+    --nx-border-strong:rgba(255,255,255,0.16);
+    --nx-ink:#eef1f4;
+    --nx-ink-dim:#9aa3ad;
+    --nx-ink-faint:#6b7280;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"]{
+  --nx-bg-0:#0b0d10;
+  --nx-bg-1:#12151a;
+  --nx-glass:rgba(255,255,255,0.055);
+  --nx-glass-strong:rgba(255,255,255,0.09);
+  --nx-border:rgba(255,255,255,0.09);
+  --nx-border-strong:rgba(255,255,255,0.16);
+  --nx-ink:#eef1f4;
+  --nx-ink-dim:#9aa3ad;
+  --nx-ink-faint:#6b7280;
+  color-scheme: dark;
+}
+
+/* ---- accent color palette (~20 professional options) ---- */
+:root[data-accent="blue"]     { --nx-accent:#3b7cf5; }
+:root[data-accent="indigo"]   { --nx-accent:#5b63e0; }
+:root[data-accent="purple"]   { --nx-accent:#8b5cf6; }
+:root[data-accent="violet"]   { --nx-accent:#a855f7; }
+:root[data-accent="pink"]     { --nx-accent:#e0559c; }
+:root[data-accent="rose"]     { --nx-accent:#e1425e; }
+:root[data-accent="red"]      { --nx-accent:#e0342f; }
+:root[data-accent="orange"]   { --nx-accent:#e2793a; }
+:root[data-accent="amber"]    { --nx-accent:#d99a2b; }
+:root[data-accent="yellow"]   { --nx-accent:#c9a92a; }
+:root[data-accent="lime"]     { --nx-accent:#8dbf3d; }
+:root[data-accent="green"]    { --nx-accent:#3fa564; }
+:root[data-accent="emerald"]  { --nx-accent:#2fae7f; }
+:root[data-accent="teal"]     { --nx-accent:#2ba9a0; }
+:root[data-accent="cyan"]     { --nx-accent:#2ca7cf; }
+:root[data-accent="sky"]      { --nx-accent:#3b93f7; }
+:root[data-accent="slate"]    { --nx-accent:#64748b; }
+:root[data-accent="graphite"] { --nx-accent:#5a5f68; }
+:root[data-accent="ocean"]    { --nx-accent:#2673a8; }
+:root[data-accent="aurora"]   { --nx-accent:#3aa9a0; }
+
+:root{
+  --nx-accent-soft: color-mix(in srgb, var(--nx-accent) 14%, transparent);
+  --nx-accent-glow: color-mix(in srgb, var(--nx-accent) 38%, transparent);
+}
+
+/* ---- base ---- */
+*{ box-sizing:border-box; }
+html,body,#root{ height:100%; }
+body{
+  margin:0;
+  background:
+    radial-gradient(900px 500px at 10% -10%, var(--nx-accent-soft), transparent 60%),
+    var(--nx-bg-0);
+  color:var(--nx-ink);
+  font-family:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+}
+[data-density="compact"]{ --nx-space-4:12px; --nx-space-5:16px; --nx-space-6:20px; }
+
+/* ---- reusable glass surfaces ---- */
+.nx-glass-card{
+  background:var(--nx-glass);
+  border:1px solid var(--nx-border);
+  border-radius:var(--nx-radius-lg);
+  backdrop-filter:blur(22px) saturate(140%);
+  -webkit-backdrop-filter:blur(22px) saturate(140%);
+  box-shadow:var(--nx-shadow-card);
+}
+.nx-glass-surface{
+  background:var(--nx-glass-strong);
+  border:1px solid var(--nx-border);
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+}
+.nx-focus-ring:focus-visible{
+  outline:2px solid var(--nx-accent);
+  outline-offset:2px;
+}
